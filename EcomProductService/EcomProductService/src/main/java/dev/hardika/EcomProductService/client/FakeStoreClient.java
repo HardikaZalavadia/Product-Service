@@ -21,6 +21,8 @@ public class FakeStoreClient {
     private String fakeStoreAPIProductPath;
     @Value("${fakestore.api.cart.for.user.path}")
     private String getFakeStoreAPICartForUser;
+    @Value("fakestore.api.cart.path")
+    private String fakeStoreAPICartPath;
 
 
     public List<FakeStoreProductResponseDTO> getAllProducts(){
@@ -47,5 +49,15 @@ public class FakeStoreClient {
         ResponseEntity<FakeStoreCartResponseDTO[]> cartResponce =
                 restTemplate.getForEntity(fakeStoreCartForUserURL,FakeStoreCartResponseDTO[].class);
         return List.of(cartResponce.getBody());
+    }
+
+    public FakeStoreCartResponseDTO getCartById(int id) {
+//        https://fakestoreapi.com/carts/1
+        String fakeStoreCartURL = fakeStoreAPIBaseURL.concat(fakeStoreAPICartPath).concat(String.valueOf(id));
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        ResponseEntity<FakeStoreCartResponseDTO> cart =
+                restTemplate.getForEntity(fakeStoreCartURL,FakeStoreCartResponseDTO.class);
+        return cart.getBody();
+
     }
 }

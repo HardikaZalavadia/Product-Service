@@ -3,6 +3,7 @@ package dev.hardika.EcomProductService.controller;
 import dev.hardika.EcomProductService.dto.FakeStoreProductResponseDTO;
 import dev.hardika.EcomProductService.entity.Product;
 import dev.hardika.EcomProductService.exception.ProductIdInvalidException;
+import dev.hardika.EcomProductService.exception.RandomException;
 import dev.hardika.EcomProductService.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,9 @@ public class ProductController {
         }
         FakeStoreProductResponseDTO product = productService.getProduct(id);
         return ResponseEntity.ok(product);
-
+    }
+    @GetMapping("/productexception")
+    public ResponseEntity getProductException(){
+        throw new RandomException("Product not found");
     }
 }

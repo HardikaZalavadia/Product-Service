@@ -3,6 +3,8 @@ package dev.hardika.EcomProductService.controller;
 import dev.hardika.EcomProductService.client.FakeStoreClient;
 import dev.hardika.EcomProductService.dto.FakeStoreCartResponseDTO;
 import dev.hardika.EcomProductService.exception.CartNotFound;
+import dev.hardika.EcomProductService.exception.CartNotFoundOfThisId;
+import dev.hardika.EcomProductService.exception.RandomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,5 +27,16 @@ public class CartController {
         return ResponseEntity.ok(fakeStoreCartResponseDTO);
     }
 
-
+    @GetMapping("/carts/{id}")
+    public ResponseEntity getCartById(@PathVariable("id") int id){
+        FakeStoreCartResponseDTO fakeStoreCartResponseDTOS = fakeStoreClient.getCartById(id);
+        if(fakeStoreCartResponseDTOS == null){
+            throw new CartNotFoundOfThisId(" Card not found of id : "+ id);
+        }
+        return ResponseEntity.ok(fakeStoreCartResponseDTOS);
+    }
+    @GetMapping("/cartexception")
+    public ResponseEntity getCartException(){
+        throw new RandomException("cart not found");
+    }
 }
