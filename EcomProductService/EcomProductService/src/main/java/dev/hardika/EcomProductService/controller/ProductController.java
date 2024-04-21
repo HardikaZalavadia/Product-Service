@@ -6,18 +6,23 @@ import dev.hardika.EcomProductService.exception.ProductIdInvalidException;
 import dev.hardika.EcomProductService.exception.RandomException;
 import dev.hardika.EcomProductService.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class ProductController {
     @Autowired
+    @Qualifier("productServiceImpl")
     private ProductService productService;
+
+    @PostMapping("/product")
+    public ResponseEntity createProduct(@RequestBody Product product){
+        Product saveProduct = productService.createProduct(product);
+        return ResponseEntity.ok(saveProduct);
+    }
 
     @GetMapping("/products")
     public ResponseEntity getAllProducts(){
