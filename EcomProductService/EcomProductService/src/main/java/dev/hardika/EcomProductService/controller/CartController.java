@@ -1,7 +1,7 @@
 package dev.hardika.EcomProductService.controller;
 
 import dev.hardika.EcomProductService.client.FakeStoreClient;
-import dev.hardika.EcomProductService.dto.FakeStoreCartResponseDTO;
+import dev.hardika.EcomProductService.dto.fakeStoreDTO.FakeStoreCartResponseDTO;
 import dev.hardika.EcomProductService.exception.CartNotFound;
 import dev.hardika.EcomProductService.exception.CartNotFoundOfThisId;
 import dev.hardika.EcomProductService.exception.RandomException;

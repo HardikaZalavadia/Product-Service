@@ -1,7 +1,7 @@
 package dev.hardika.EcomProductService.client;
 
-import dev.hardika.EcomProductService.dto.FakeStoreCartResponseDTO;
-import dev.hardika.EcomProductService.dto.FakeStoreProductResponseDTO;
+import dev.hardika.EcomProductService.dto.fakeStoreDTO.FakeStoreCartResponseDTO;
+import dev.hardika.EcomProductService.dto.fakeStoreDTO.FakeStoreProductResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;

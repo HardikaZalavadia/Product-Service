@@ -1,4 +1,4 @@
-package dev.hardika.EcomProductService.dto;
+package dev.hardika.EcomProductService.dto.fakeStoreDTO;
 
 import lombok.Getter;
 import lombok.Setter;

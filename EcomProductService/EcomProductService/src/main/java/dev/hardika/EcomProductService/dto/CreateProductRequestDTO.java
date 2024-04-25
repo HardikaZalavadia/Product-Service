@@ -1,20 +1,18 @@
-package dev.hardika.EcomProductService.entity;
+package dev.hardika.EcomProductService.dto;
 
-import jakarta.persistence.Entity;
+import dev.hardika.EcomProductService.entity.Category;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
-@Entity
-public class Product extends BaseModel {
-
+public class CreateProductRequestDTO {
     private String title;
     private double price;
     private String description;
-    @ManyToOne
-    private Category category;
+    private UUID categoryID;
     private String imageURL;
-    private double ratings;
 }

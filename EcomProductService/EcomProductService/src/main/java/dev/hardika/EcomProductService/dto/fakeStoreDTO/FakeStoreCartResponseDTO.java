@@ -1,5 +1,6 @@
-package dev.hardika.EcomProductService.dto;
+package dev.hardika.EcomProductService.dto.fakeStoreDTO;
 
+import dev.hardika.EcomProductService.dto.ProductQuantity;
 import lombok.Getter;
 import lombok.Setter;
 
