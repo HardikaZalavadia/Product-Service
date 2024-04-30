@@ -42,4 +42,18 @@ public class CategoryController {
     public ResponseEntity<Boolean> deleteCategory(@PathVariable("id") UUID id){
         return ResponseEntity.ok(categoryService.deleteCategory(id));
     }
+   /*  not worked have some issues need to solve
+    @GetMapping("/name/{categoryName}")
+    public ResponseEntity<CategoryResponseDTO> getCategoryByName(@PathVariable("categoryName") String name){
+        if(name==null || name.isEmpty() || name.isBlank()){
+            throw new CategoryInvalidException("Enter valid name of category:");
+        }
+        return ResponseEntity.ok(categoryService.getCategoryByName(name));
+    }
+    */
+    @GetMapping("/totalPrice/{id}")
+    public ResponseEntity<Double> getPriceForCategory(@PathVariable("id") UUID id){
+        return ResponseEntity.ok(categoryService.getTotlePriceForCategory(id));
+    }
+
 }

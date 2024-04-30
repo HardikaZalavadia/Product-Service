@@ -3,6 +3,7 @@ package dev.hardika.EcomProductService.service;
 import dev.hardika.EcomProductService.dto.CategoryResponseDTO;
 import dev.hardika.EcomProductService.dto.CreateCategoryRequestDTO;
 import dev.hardika.EcomProductService.entity.Category;
+import dev.hardika.EcomProductService.entity.Product;
 import dev.hardika.EcomProductService.exception.CategoryNotFoundException;
 import dev.hardika.EcomProductService.mapper.CategoryEntityDTOMapper;
 import dev.hardika.EcomProductService.repository.CategoryRepository;
@@ -51,7 +52,35 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public boolean deleteCategory(UUID categoryId) {
-       categoryRepository.deleteById(categoryId);
+        categoryRepository.deleteById(categoryId);
        return true;
+    }
+
+    /*
+    @Override
+    public CategoryResponseDTO getCategoryByName(String categoryName) {
+        Category category = new Category();
+
+        if(!category.getName().equals(categoryRepository.findCategoryByName(categoryName))){
+            new CategoryNotFoundException(" Category is not found with this Id: "+ categoryName);
+        }
+        category = categoryRepository.findCategoryByName(categoryName);
+                return CategoryEntityDTOMapper.convertCategoryEntityToCategoryResponseDTO(category);
+    }
+    */
+    @Override
+    public double getTotlePriceForCategory(UUID categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new CategoryNotFoundException(" Category is not found with this Id: "+ categoryId));
+        if(category.getProducts().isEmpty()){
+            return 0;
+        }
+        else{
+            double sum = 0;
+            for(Product product : category.getProducts()){
+                sum += product.getPrice();
+            }
+            return sum;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package dev.hardika.EcomProductService.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,6 @@ import java.util.List;
 @Entity
 public class Category extends BaseModel{
     private String name;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Product> products;
 }
