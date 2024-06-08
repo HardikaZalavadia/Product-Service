@@ -1,13 +1,20 @@
 package dev.hardika.EcomProductService.controller;
 
+import dev.hardika.EcomProductService.client.userAuthClient.dto.SessionStatus;
+import dev.hardika.EcomProductService.client.userAuthClient.UserAuthServiceClient;
+import dev.hardika.EcomProductService.client.userAuthClient.dto.Role;
+import dev.hardika.EcomProductService.client.userAuthClient.dto.ValidateResponseDto;
 import dev.hardika.EcomProductService.dto.CreateProductRequestDTO;
 import dev.hardika.EcomProductService.dto.ProductResponseDTO;
-import dev.hardika.EcomProductService.dto.fakeStoreDTO.FakeStoreProductResponseDTO;
+
+
 import dev.hardika.EcomProductService.exception.ProductIdInvalidException;
-import dev.hardika.EcomProductService.exception.RandomException;
 import dev.hardika.EcomProductService.service.ProductService;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +24,17 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-    @Autowired
+    //@Autowired
     @Qualifier("productServiceImpl")
     private ProductService productService;
+
+    //@Autowired
+    private UserAuthServiceClient userAuthService;
+
+    private ProductController(ProductService productService, UserAuthServiceClient userAuthService) {
+        this.productService = productService;
+        this.userAuthService = userAuthService;
+    }
 
     @PostMapping
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody CreateProductRequestDTO productRequestDTO){
@@ -27,12 +42,46 @@ public class ProductController {
         return ResponseEntity.ok(saveProduct);
     }
 
-    @GetMapping
+    @Cacheable(value = "allProducts")
+    @GetMapping("allproducts")
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts(){
         List<ProductResponseDTO> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
+    // Make only Admin can access all the products
+    @Cacheable(value = "product")
+    @GetMapping
+    public ResponseEntity<List<ProductResponseDTO>> getAllProducts(@Nullable @RequestHeader("Auth_Token") String authToken,
+                                                                   @Nullable @RequestHeader("User_Id") Long userId){
 
+        //@Nullable gives go-ahead even if parameter is null
+        //check if token exists
+        if(userId == null || authToken == null){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        ValidateResponseDto responseDto = userAuthService.validate(authToken,userId);
+        if(!responseDto.getSessionStatus().equals(SessionStatus.ACTIVE)){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        boolean isUserAdmin = false;
+
+        for(Role role : responseDto.getUserResponseDTO().getRole()){
+             if(role.getRoleName().equalsIgnoreCase("admin")){
+                 isUserAdmin = true;
+             }
+        }
+
+        if(!isUserAdmin){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        List<ProductResponseDTO> products = productService.getAllProducts();
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @Cacheable(value = "product", key = "#id")
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable("id") UUID id) {
         if(id == null){
@@ -52,14 +101,20 @@ public class ProductController {
 
         return ResponseEntity.ok(productService.deleteProduct(id));
     }
+
     @GetMapping("/name/{productName}")
     public ResponseEntity<ProductResponseDTO> getProductByName(@PathVariable("productName") String productName){
         return ResponseEntity.ok(productService.getProductByName(productName));
     }
+
     @GetMapping("/{min}/{max}")
     public ResponseEntity<List<ProductResponseDTO>> getProduct(@PathVariable("min") double minPrice, @PathVariable("max") double maxPrice){
         return ResponseEntity.ok(productService.getProduct(minPrice,maxPrice));
     }
+
+
+
+
     /*@GetMapping("/productexception")
     public ResponseEntity getProductException(){
         throw new RandomException("Product not found");

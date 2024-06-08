@@ -16,7 +16,7 @@ import java.util.UUID;
 @MappedSuperclass
 public class BaseModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
     @CreationTimestamp
     private Instant createdAt;
