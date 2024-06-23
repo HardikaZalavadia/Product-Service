@@ -1,9 +1,6 @@
-package dev.hardika.EcomProductService.service.orderServiceClient;
+package dev.hardika.EcomProductService.client.orderServiceClient;
 
-import dev.hardika.EcomProductService.client.orderServiceClient.Order;
-import dev.hardika.EcomProductService.client.orderServiceClient.OrderStatus;
 import dev.hardika.EcomProductService.client.orderServiceClient.dtoForOrder.OrderDto;
-import dev.hardika.EcomProductService.client.orderServiceClient.dtoForOrder.OrderResponseDto;
 import dev.hardika.EcomProductService.entity.Product;
 import dev.hardika.EcomProductService.exception.ProductNotFoundException;
 import dev.hardika.EcomProductService.repository.ProductRepository;

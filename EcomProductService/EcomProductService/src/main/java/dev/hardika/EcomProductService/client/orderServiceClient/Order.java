@@ -17,7 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Order extends BaseModel {
-    @OneToMany
+
     private List<UUID> productIds = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

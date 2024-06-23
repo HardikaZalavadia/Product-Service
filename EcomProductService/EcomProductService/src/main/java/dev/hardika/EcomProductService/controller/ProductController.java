@@ -1,6 +1,5 @@
 package dev.hardika.EcomProductService.controller;
 
-import dev.hardika.EcomProductService.client.orderServiceClient.Order;
 import dev.hardika.EcomProductService.client.userAuthClient.dto.SessionStatus;
 import dev.hardika.EcomProductService.client.userAuthClient.UserAuthServiceClient;
 import dev.hardika.EcomProductService.client.userAuthClient.dto.Role;
@@ -12,7 +11,7 @@ import dev.hardika.EcomProductService.dto.ProductResponseDTO;
 import dev.hardika.EcomProductService.client.orderServiceClient.dtoForOrder.OrderDto;
 import dev.hardika.EcomProductService.exception.ProductIdInvalidException;
 import dev.hardika.EcomProductService.service.ProductService;
-import dev.hardika.EcomProductService.service.orderServiceClient.OrderServiceClient;
+import dev.hardika.EcomProductService.client.orderServiceClient.OrderServiceClient;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
