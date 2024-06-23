@@ -1,5 +1,6 @@
 package dev.hardika.EcomProductService.controller;
 
+import dev.hardika.EcomProductService.client.orderServiceClient.Order;
 import dev.hardika.EcomProductService.client.userAuthClient.dto.SessionStatus;
 import dev.hardika.EcomProductService.client.userAuthClient.UserAuthServiceClient;
 import dev.hardika.EcomProductService.client.userAuthClient.dto.Role;
@@ -8,8 +9,10 @@ import dev.hardika.EcomProductService.dto.CreateProductRequestDTO;
 import dev.hardika.EcomProductService.dto.ProductResponseDTO;
 
 
+import dev.hardika.EcomProductService.client.orderServiceClient.dtoForOrder.OrderDto;
 import dev.hardika.EcomProductService.exception.ProductIdInvalidException;
 import dev.hardika.EcomProductService.service.ProductService;
+import dev.hardika.EcomProductService.service.orderServiceClient.OrderServiceClient;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,9 +34,13 @@ public class ProductController {
     //@Autowired
     private UserAuthServiceClient userAuthService;
 
-    private ProductController(ProductService productService, UserAuthServiceClient userAuthService) {
+    @Autowired
+    private OrderServiceClient orderService;
+
+    private ProductController(ProductService productService, UserAuthServiceClient userAuthService, OrderServiceClient orderService) {
         this.productService = productService;
         this.userAuthService = userAuthService;
+        this.orderService = orderService;
     }
 
     @PostMapping
@@ -112,8 +119,20 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProduct(minPrice,maxPrice));
     }
 
+    @PostMapping("/order")
+    public ResponseEntity<String> createOrder(@RequestBody OrderDto orderDto) {
+        // Here, you can add logic to validate the product ID and other business logic
 
+        // For simplicity, let's assume the order request contains all necessary information
+        orderService.sendOrder(orderDto);
 
+        return ResponseEntity.status(HttpStatus.CREATED).body("Order created and sent to Order Service");
+    }
+
+//    @GetMapping("/orderStatus/{orderId}")
+//    public ResponseEntity<String> getOrderStatus(@PathVariable ("orderId") UUID orderId){
+//        // create order status repository
+//    }
 
     /*@GetMapping("/productexception")
     public ResponseEntity getProductException(){
